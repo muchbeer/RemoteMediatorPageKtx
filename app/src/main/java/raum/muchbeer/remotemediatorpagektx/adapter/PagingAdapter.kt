@@ -6,10 +6,11 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import raum.muchbeer.remotemediatorpagektx.data.remote.model.DbPagingModel
 import raum.muchbeer.remotemediatorpagektx.data.remote.model.PagingModel
 import raum.muchbeer.remotemediatorpagektx.databinding.TaskListViewBinding
 
-class PagingAdapter : PagingDataAdapter<PagingModel.DtOPagingModel,
+class PagingAdapter : PagingDataAdapter<DbPagingModel,
                             PagingAdapter.PagingVH>(diffUtil) {
 
     override fun onBindViewHolder(holder: PagingVH, position: Int) {
@@ -26,23 +27,23 @@ class PagingAdapter : PagingDataAdapter<PagingModel.DtOPagingModel,
 
 
     class PagingVH(val binding : TaskListViewBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bindData(data : PagingModel.DtOPagingModel) {
+        fun bindData(data : DbPagingModel) {
             Log.d("PageAdapter", "The datas id are: ${data.id}")
             binding.data = data
         }
     }
 
-    companion object diffUtil : DiffUtil.ItemCallback<PagingModel.DtOPagingModel>() {
+    companion object diffUtil : DiffUtil.ItemCallback<DbPagingModel>() {
         override fun areItemsTheSame(
-            oldItem: PagingModel.DtOPagingModel,
-            newItem: PagingModel.DtOPagingModel
+            oldItem: DbPagingModel,
+            newItem: DbPagingModel
         ): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
-            oldItem: PagingModel.DtOPagingModel,
-            newItem: PagingModel.DtOPagingModel
+            oldItem: DbPagingModel,
+            newItem: DbPagingModel
         ): Boolean {
 return oldItem == newItem       }
 

@@ -10,6 +10,7 @@ import raum.muchbeer.remotemediatorpagektx.data.local.CacheKeyModel
 import raum.muchbeer.remotemediatorpagektx.data.local.CacheMapper
 import raum.muchbeer.remotemediatorpagektx.data.local.CacheModel
 import raum.muchbeer.remotemediatorpagektx.data.remote.api.DataService
+import raum.muchbeer.remotemediatorpagektx.data.remote.model.DbPagingModel
 import raum.muchbeer.remotemediatorpagektx.data.remote.model.DtOMapper
 import raum.muchbeer.remotemediatorpagektx.data.remote.model.DtOResponse
 import raum.muchbeer.remotemediatorpagektx.data.remote.model.PagingModel
@@ -20,7 +21,7 @@ class RemoteMediatorDataSource(
    val dataService: DataService,
   val  dataDb : CacheDatabase
 ) : RemoteMediator<Int, CacheModel>(), DtOMapper<DtOResponse, PagingModel>,
-            CacheMapper<PagingModel.DtOPagingModel, CacheModel>{
+            CacheMapper<DbPagingModel, CacheModel>{
     override suspend fun load(
         loadType: LoadType,
         state: PagingState<Int, CacheModel>
@@ -86,7 +87,7 @@ class RemoteMediatorDataSource(
 
     }
 
-    override fun mapFromDtoModelToCacheModel(model: List<PagingModel.DtOPagingModel>): List<CacheModel> {
+    override fun mapFromDtoModelToCacheModel(model: List<DbPagingModel>): List<CacheModel> {
             return model.map {
                 CacheModel(
                     cacheId = it.id.toLong(),
@@ -104,7 +105,7 @@ class RemoteMediatorDataSource(
                 total_page = last_page,
                 current_page = current_page,
                 data = data.map {
-                    PagingModel.DtOPagingModel(
+                    DbPagingModel(
                         id = it.id,
                         body = it.body,
                         created_at = it.created_at,

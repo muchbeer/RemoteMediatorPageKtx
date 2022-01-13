@@ -6,7 +6,7 @@
     <data>
         <variable
             name="data"
-            type="raum.muchbeer.remotemediatorpagektx.data.remote.model.PagingModel.DtOPagingModel" />
+            type="raum.muchbeer.remotemediatorpagektx.data.remote.model.DbPagingModel" />
 
     </data>
 

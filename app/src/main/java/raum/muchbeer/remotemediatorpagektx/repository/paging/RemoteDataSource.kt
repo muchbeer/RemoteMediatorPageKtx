@@ -3,6 +3,7 @@ package raum.muchbeer.remotemediatorpagektx.repository.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import raum.muchbeer.remotemediatorpagektx.data.remote.api.DataService
+import raum.muchbeer.remotemediatorpagektx.data.remote.model.DbPagingModel
 import raum.muchbeer.remotemediatorpagektx.data.remote.model.DtOMapper
 import raum.muchbeer.remotemediatorpagektx.data.remote.model.DtOResponse
 import raum.muchbeer.remotemediatorpagektx.data.remote.model.PagingModel
@@ -12,11 +13,11 @@ import java.io.InvalidObjectException
 import javax.inject.Inject
 
 class RemoteDataSource (val dataService: DataService) :
-    PagingSource<Int, PagingModel.DtOPagingModel>(),
+    PagingSource<Int, DbPagingModel>(),
            DtOMapper<DtOResponse, PagingModel> {
 
 
-    override fun getRefreshKey(state: PagingState<Int, PagingModel.DtOPagingModel>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, DbPagingModel>): Int? {
             //IN case of refresh key then get the recent access position
         return state.anchorPosition?.let {
             state.closestPageToPosition(it)?.prevKey?.plus(1)
@@ -24,7 +25,7 @@ class RemoteDataSource (val dataService: DataService) :
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PagingModel.DtOPagingModel> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, DbPagingModel> {
 
         val currentPage = params.key ?: 1
 
@@ -54,7 +55,7 @@ class RemoteDataSource (val dataService: DataService) :
                 total_page = last_page,
                 current_page = current_page,
                 data = data.map {
-                    PagingModel.DtOPagingModel(
+                    DbPagingModel(
                         id = it.id,
                         body = it.body,
                         created_at = it.created_at,
