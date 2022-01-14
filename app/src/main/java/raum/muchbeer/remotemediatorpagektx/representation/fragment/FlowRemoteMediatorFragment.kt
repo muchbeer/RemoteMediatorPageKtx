@@ -23,6 +23,7 @@ import raum.muchbeer.remotemediatorpagektx.databinding.FragmentFlowPagingSourceB
 import raum.muchbeer.remotemediatorpagektx.databinding.FragmentFlowRemoteMediatorBinding
 import raum.muchbeer.remotemediatorpagektx.representation.MediatorViewModel
 
+@ExperimentalCoroutinesApi
 @FlowPreview
 @AndroidEntryPoint
 class FlowRemoteMediatorFragment : Fragment() {
@@ -54,7 +55,6 @@ class FlowRemoteMediatorFragment : Fragment() {
     return binding.root
     }
 
-    @ExperimentalCoroutinesApi
     private fun listOfApis() = viewLifecycleOwner.lifecycleScope.launch {
 
      /*   viewModel.retrieveMediatorList().collectLatest {
@@ -64,8 +64,6 @@ class FlowRemoteMediatorFragment : Fragment() {
         viewModel.searchListLiveData.collectLatest {
             mediatorAdapter.submitData(lifecycle, it)
         }
-
-
     }
 
     private fun addLoadState() {
@@ -90,7 +88,7 @@ class FlowRemoteMediatorFragment : Fragment() {
             setTextColor(Color.WHITE)
             setActionTextColor(Color.WHITE)
             setAction("Close") {dismiss()}
-            anchorView = binding.remoteProgress
+         //   anchorView = binding.remoteProgress
         }.show()
     }
 
