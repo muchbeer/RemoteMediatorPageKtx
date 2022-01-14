@@ -6,4 +6,6 @@ import raum.muchbeer.remotemediatorpagektx.data.local.CacheModel
 
 interface RepoRemoteMedDataSource {
     fun retrieveMergeApis() : Flow<PagingData<CacheModel>>
+
+    fun searchApis(searchItem : String) : Flow<PagingData<CacheModel>>
 }

@@ -27,6 +27,17 @@ class RepoRemoteMedImpl(
         ).flow
        }
 
+    override fun searchApis(searchItem: String): Flow<PagingData<CacheModel>> {
+        return Pager(
+            config = defaultConfig(),
+            remoteMediator = remoteMediatorPageSource,
+            pagingSourceFactory = {
+                if (searchItem.isNullOrEmpty()) dataDB.cacheDao().retrieveApis() else
+                dataDB.cacheDao().searchTitleApis(searchItem)
+            }
+        ).flow
+    }
+
     private fun defaultConfig() : PagingConfig {
         return PagingConfig(
             pageSize = 10,

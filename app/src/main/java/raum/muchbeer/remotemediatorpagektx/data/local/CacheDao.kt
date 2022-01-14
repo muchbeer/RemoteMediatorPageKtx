@@ -16,6 +16,10 @@ interface CacheDao {
     @Query("SELECT * FROM api_tbl ORDER by id ASC")
     fun retrieveApis() : PagingSource<Int, CacheModel>
 
+    // @Query("SELECT * FROM dog WHERE breed LIKE '%' || :search || '%'")
+    @Query("SELECT * FROM api_tbl where title like '%' || :title || '%'")
+    fun searchTitleApis(title : String) : PagingSource<Int, CacheModel>
+
     @Query("DELETE FROM api_tbl")
     suspend fun clearAllApi()
 }

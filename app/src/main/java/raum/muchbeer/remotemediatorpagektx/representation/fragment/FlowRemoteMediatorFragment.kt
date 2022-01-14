@@ -2,9 +2,7 @@ package raum.muchbeer.remotemediatorpagektx.representation.fragment
 
 import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,14 +11,19 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import raum.muchbeer.remotemediatorpagektx.R
 import raum.muchbeer.remotemediatorpagektx.adapter.MediatorAdapter
 import raum.muchbeer.remotemediatorpagektx.adapter.PagingAdapter
 import raum.muchbeer.remotemediatorpagektx.databinding.FragmentFlowPagingSourceBinding
 import raum.muchbeer.remotemediatorpagektx.databinding.FragmentFlowRemoteMediatorBinding
 import raum.muchbeer.remotemediatorpagektx.representation.MediatorViewModel
 
+@FlowPreview
 @AndroidEntryPoint
 class FlowRemoteMediatorFragment : Fragment() {
 
@@ -47,13 +50,22 @@ class FlowRemoteMediatorFragment : Fragment() {
         listOfApis()
 
         addLoadState()
+    setHasOptionsMenu(true)
     return binding.root
     }
 
-    private fun listOfApis() = lifecycleScope.launch {
-        viewModel.retrieveMediatorList().collectLatest {
+    @ExperimentalCoroutinesApi
+    private fun listOfApis() = viewLifecycleOwner.lifecycleScope.launch {
+
+     /*   viewModel.retrieveMediatorList().collectLatest {
+            mediatorAdapter.submitData(lifecycle, it)
+        }*/
+
+        viewModel.searchListLiveData.collectLatest {
             mediatorAdapter.submitData(lifecycle, it)
         }
+
+
     }
 
     private fun addLoadState() {
@@ -81,6 +93,36 @@ class FlowRemoteMediatorFragment : Fragment() {
             anchorView = binding.remoteProgress
         }.show()
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        inflater.inflate(R.menu.search_item, menu)
+
+        val search = menu.findItem(R.id.searchItems)
+     //   val searchView = searchItem.actionView as SearchView
+       val searchView = search.actionView as androidx.appcompat.widget.SearchView
+        searchView.isSubmitButtonEnabled = true
+        searchView.setOnQueryTextListener(object: androidx.appcompat.widget.
+        SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+             /*   if (query != null) {
+                  //  getItemsFromDb(query)
+                }*/
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    viewModel.setSearchQuery(it)
+                }
+
+                return true
+            }
+
+        })
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     }
